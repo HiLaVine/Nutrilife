@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'autenticacao/css/cadastro.css' %}">
+{% endblock %}
+{% block 'titulo' %}Cadastre-se{% endblock %}
+{% block 'body' %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 sidebar">
+                <div class="logo_sidebar">
+                    <h2 class="logo">
+                        <img class="img_logo_sidebar" src="{% static 'autenticacao/img/logo_nutri_lab.png' %}">
+                    </h2>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="area_cadastrar">
+                    {% if messages %}
+                        <br>
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <h2 class="titulo" style="color: green;">Sea bienvenido a NutriLife🥕</h2><br>
+                    <p class="sub-titulo" class="bold" style="color: brown;">"En NutriLife, creemos que cada bocado cuenta, y estamos aquí para asegurarnos de que cuenten para tu bienestar."</p><br>
+                    <p class="sub-titulo" class="bold" style="color: #000080;">Inicia sesión con tu cuenta 🍎</p>
+                    <hr>
+                    <form action="{% url 'logar' %}" method="POST">
+                        {% csrf_token %}
+                        <span class="bold" style="color: red;">Nombre del Usuario</span>
+                        <input class="form-control input-form" name="usuario" type="text"
+                               placeholder="Escriba su nombre de usuario...">
+                        <br>
+                        <span class="bold" style="color: red;">Contraseña</span>
+                        <input class="form-control input-form" name="senha" type="password"
+                               placeholder="Escriba su contraseña...">
+                        <br>
+                        <button class="btn-first">Iniciar Sesión</button>
+                    </form>
+                    <h3 style="position: absolute; bottom: 65px; font-weight: bold">
+                        No tienes una cuenta?&nbsp
+                        <a href="{% url 'cadastro' %}" class="btn btn-outline-success btn-lg">Registro</a>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
