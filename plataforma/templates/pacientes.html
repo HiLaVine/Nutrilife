@@ -1,0 +1,104 @@
+{% extends 'base_plataforma.html' %}
+{% load static %}
+{% block 'plataforma' %}
+    {% if messages %}
+        <br>
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <br>
+    <br>
+    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal">
+        Agregar Nuevo Familiar
+    </button>
+    <br>
+    <div class="container mt-4">
+        <div class="row">
+            {% for paciente in pacientes %}
+                <div class="col-md-4">
+                    <a href="#" class="link-hover" style="text-decoration: none; color: inherit; transition: color 0.2s;">
+                        <div style="background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin: 20px 0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.2s; text-align: center;">
+                            <div style="margin-bottom: 15px;">
+                                {% if paciente.sexo == "M" %}
+                                    <img src="{% static 'plataforma/img/perfil2.png' %}" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover;">
+                                {% else %}
+                                    <img src="{% static 'plataforma/img/perfil1.png' %}" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover;">
+                                {% endif %}
+                            </div>
+                            <p style="font-family: 'Arial', sans-serif; color: #555; line-height: 1.6;">Nombre: {{ paciente.nome }}</p>
+                            <p style="font-family: 'Arial', sans-serif; color: #555; line-height: 1.6;">Edad: {{ paciente.idade }} años</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.col-md-4 a').forEach(link => {
+            link.addEventListener('mouseover', () => {
+                link.style.color = '#4CAF50';
+            });
+            link.addEventListener('mouseout', () => {
+                link.style.color = 'inherit';
+            });
+            link.querySelector('div').addEventListener('mouseover', () => {
+                link.querySelector('div').style.transform = 'scale(1.05)';
+            });
+            link.querySelector('div').addEventListener('mouseout', () => {
+                link.querySelector('div').style.transform = 'scale(1)';
+            });
+        });
+    </script>
+    
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title titulo" id="exampleModalLabel">Registrar Familiar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'pacientes' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img src="{% static 'plataforma/img/perfil2.png' %}">
+                            </div>
+                            <div class="col-md-9">
+                                <label>Nombre del Familiar:</label>
+                                <input type="text" name="nome" class="form-control"
+                                       placeholder="Escribe tu Nombre...">
+                            </div>
+                        </div>
+                        <br>
+                        <label>Sexo:</label>
+                        <select name="sexo" class="form-control">
+                            <option value="M">Masculino ♂️</option>
+                            <option value="F">Feminino ♀️</option>
+                        </select>
+                        <br>
+                        <label>Edad:</label>
+                        <input type="number" placeholder="0" class="form-control" name="idade" placeholder="0" min="0" max="120" step="1">
+                        <br>
+                        <label>✉️E-mail:</label>
+                        <input type="email" name="email" class="form-control" placeholder="exemple@email.com" required>
+                        <br>
+                        <label>☎️Telefono:</label>
+                        <input type="tel" name="telefone" class="form-control" placeholder="+55 0000-0000"  pattern="^\d{10}$" required>
+                        <br>
+                        <div style="text-align: right;">
+                            <input type="submit" class="btn btn-danger btn-lg" value="Registrar">
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

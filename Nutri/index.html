@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrilife - Lista de Compras</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header style="background: linear-gradient(to right, #b3ffc4, #b9cfbe); display: flex; align-items: center; justify-content: center; padding: 10px;">
+        <img src="/imagenes/logo.png" style="margin-right: 10px; width: 95px;">
+        <h3 style="font-weight: bold; padding: 10px; font-family: Helvetica Neue, Arial, sans-serif; font-size: 24px; color:#6a5d4d;"> "Nutri Life: Alimenta tu Vida, Nutre tu Bienestar 🥕"</h3>
+    </header>
+    
+    <main>
+        <nav>
+            <button id="btn-lista-compras" class="nav-button" style="font-weight: bold;">
+                <br>
+                <img src="imagenes/lista.png">
+                <br> Lista de Compras
+                <br>
+            </button>
+            <button id="btn-alacena" class="nav-button" style="font-weight: bold;">
+                <br>
+                <img src="imagenes/alacena.png">
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alacena&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </button>
+            <button id="btn-recetas" class="nav-button" style="font-weight: bold;">
+                <br>
+                <img src="imagenes/receta.png">
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recetas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </button>
+            <br>
+        </nav>
+        <section id="lista-de-compras">
+            <h2 style="text-align: center; color: #0E4C92; font-weight: bold; font-size: 28px; margin-top: 30px; margin-bottom: 20px; background-color: #E8F4FA; padding: 20px; border-radius: 10px; border: 2px solid #B0C4DE; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                Lista de Compras📜
+            </h2>
+            <div id="no-listas">
+                <br>
+                <p style="color: red; font-weight: bold; text-align: center;">No hay Listas de Compra</p>
+                <button id="añadir-lista" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">+ Añadir Lista de Compra</button>
+            </div>
+            <div id="crear-lista" style="display:none; text-align:center;">
+                <br>
+                <p style="color: #0E4C92; font-weight: bold;">Indique el Nombre de la Lista: 
+                    <input type="text" id="nombre-lista" placeholder="Lista 1" style="margin-left: 10px; padding: 5px; font-size: 16px; border-radius: 3px; border: 1px solid #B0C4DE;">
+                </p>
+                <button id="aceptar-lista" style="margin-top: 10px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Aceptar</button>
+                <button id="cancelar-lista" style="margin-top: 10px; padding: 10px 20px; font-size: 16px; color: white; background-color: #FF4500; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Cancelar</button>
+                <p id="error-nombre-lista" class="error-mensaje" style="display:none; color:#721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; font-weight: bold; text-align: center; margin-top: 10px;">El Nombre de la Lista ya existe</p>
+                <p id="error-datos-lista" class="error-mensaje" style="display:none; color:#721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; font-weight: bold; text-align: center; margin-top: 10px;">Debe Añadir al menos un Alimento a la Lista.</p>
+            </div>
+            
+            <div id="lista-compras" style="display:none;">
+                <h3 style="color: #0E4C92; font-weight: bold; font-size: 24px; text-align: center; margin-top: 20px; margin-bottom: 10px; background-color: #E8F4FA; padding: 15px; border-radius: 10px; border: 2px solid #B0C4DE; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Nombre de lista: <span id="nombre-lista-mostrado"></span></h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                    <thead style="background-color: rgba(255, 255, 153, 0.8);">
+                        <tr>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Alimento</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Cantidad</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Fecha de Compra</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Fecha de Caducidad</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Comprado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="items-lista" style="background-color: #f0f5d3;">
+                        <!-- Items de la lista -->
+                    </tbody>
+                </table>
+                <p id="error-lista-vacia" class="error-mensaje" style="display:none; color:#721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; font-weight: bold; text-align: center; margin-top: 10px;">La Lista de Compras está vacía. Añada al menos un Alimento.</p>
+                <br>
+                <br>
+                <button id="añadir-alimento" style="margin-left: 25px; margin-right: 25px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">+ Añadir Alimentos</button>
+                <button id="terminar-lista" style="margin-left: 25px; margin-right: 25px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Terminar Lista de Compra</button>
+                <button id="eliminar-alimentos" style="margin-left: 25px; margin-right: 25px; padding: 10px 20px; font-size: 16px; color: white; background-color: #FF4500; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Eliminar Alimentos</button>
+            </div>
+            <br>
+            <br>
+            <div id="form-alimento" style="display:none; text-align:center;">
+                <h3 style="color: #0E4C92; font-weight: bold; font-size: 24px; text-align: center; margin-top: 20px; margin-bottom: 10px; background-color: #E8F4FA; padding: 15px; border-radius: 10px; border: 2px solid #B0C4DE; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Añadir Alimento</h3>
+                <form id="form-nuevo-alimento" style="display: flex; flex-direction: column; align-items: center; background-color: #E8F4FA; padding: 20px; border-radius: 10px; border: 2px solid #B0C4DE; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); width: 300px; margin: auto;">
+                    <input type="text" id="nombre-alimento" placeholder="Nombre del alimento" required style="margin-bottom: 15px; padding: 10px; font-size: 16px; border: 1px solid #B0C4DE; border-radius: 5px; width: 100%;">
+                    <input type="text" id="cantidad-alimento" placeholder="Cantidad" required style="margin-bottom: 15px; padding: 10px; font-size: 16px; border: 1px solid #B0C4DE; border-radius: 5px; width: 100%;">
+                    <input type="date" id="fecha-compra" placeholder="Fecha de compra" required style="margin-bottom: 15px; padding: 10px; font-size: 16px; border: 1px solid #B0C4DE; border-radius: 5px; width: 100%;">
+                    <input type="date" id="fecha-caducidad" placeholder="Fecha de caducidad" required style="margin-bottom: 15px; padding: 10px; font-size: 16px; border: 1px solid #B0C4DE; border-radius: 5px; width: 100%;">
+                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <button type="submit" style="padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer;">Añadir</button>
+                        <button type="button" id="cancelar-alimento" style="padding: 10px 20px; font-size: 16px; color: white; background-color: #FF4500; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            <div id="confirmacion-terminar" style="display:none;">
+                <p style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 5px; font-weight: bold; text-align: center; margin-top: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                    ¿Seguro que desea terminar su lista?
+                </p>
+                <button id="aceptar-terminar" style="margin-top: 10px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer;">Aceptar</button>
+                <button id="cancelar-terminar" style="margin-top: 10px; padding: 10px 20px; font-size: 16px; color: white; background-color: #FF4500; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
+            </div>
+            <div id="vista-general-listas" style="display:none;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                    <thead style="background-color: rgba(255, 255, 153, 0.8);">
+                        <tr>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Lista de Compra</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Fecha</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Estado</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listas-completadas" style="background-color: #f0f5d3;">
+                        <!-- Listas completadas -->
+                    </tbody>
+                </table>
+                <button id="añadir-nueva-lista" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">+ Añadir Lista de Compra</button>
+            </div>
+            <div id="contenido-lista-terminada" style="display:none;">
+                <h3 style="color: #0E4C92; font-weight: bold; font-size: 24px; text-align: center; margin-top: 20px; margin-bottom: 10px; background-color: #E8F4FA; padding: 15px; border-radius: 10px; border: 2px solid #B0C4DE; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Contenido de la Lista: <span id="nombre-lista-terminada"></span></h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                    <thead style="background-color: rgba(255, 255, 153, 0.8);">
+                        <tr>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Alimento</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Cantidad</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Fecha de Compra</th>
+                            <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Fecha de Caducidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="items-lista-terminada" style="background-color: #f0f5d3;">
+                        <!-- Items de la lista terminada -->
+                    </tbody>
+                </table>
+                <button id="volver-listas-completadas" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Volver a Listas Completadas</button>
+            </div>
+        </section>
+        <section id="alacena" style="display:none;">
+            <h2 style="text-align: center; color: #0E4C92; font-weight: bold; font-size: 28px; margin-top: 30px; margin-bottom: 20px; background-color: #E8F4FA; padding: 20px; border-radius: 10px; border: 2px solid #B0C4DE; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                Alacena 🍜
+            </h2>
+            <br>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                <thead style="background-color: rgba(255, 255, 153, 0.8);">
+                    <tr>
+                        <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Alimento</th>
+                        <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Cantidad</th>
+                        <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Fecha de Compra</th>
+                        <th style="padding: 10px; border: 1px solid #B0C4DE; text-align: left; color: #ffffff !important; font-size: 16px; font-weight: bold;">Fecha de Caducidad</th>
+                    </tr>
+                </thead>
+                <tbody id="items-alacena" style="background-color: #f0f5d3;">
+                    <!-- Items de la alacena -->
+                </tbody>
+            </table>
+        </section>
+        <section id="recetas" style="display:none;">
+            <h2 style="text-align: center; color: #0E4C92; font-weight: bold; font-size: 28px; margin-top: 30px; margin-bottom: 20px; background-color: rgba(245, 222, 179, 0.8); padding: 20px; border-radius: 10px; border: 2px solid rgba(222, 184, 135, 0.8); box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                Recetas 🍽️
+            </h2>
+            <div id="no-recetas">
+                <br>
+                <br>
+                <p style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 5px; font-weight: bold; text-align: center; margin-top: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                    No hay recetas
+                </p>
+                <button id="añadir-receta" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">+ Añadir Receta</button>
+            </div>
+            <div id="crear-receta" style="display:none; text-align: center;">
+                <br>
+                <p style="color: #0E4C92; font-weight: bold;">Seleccione un Ingrediente:
+                    <select id="select-ingrediente" style="margin-left: 15px; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #B0C4DE;">
+                        <!-- Opciones de ingredientes -->
+                    </select>
+                </p>
+                <button id="buscar-receta" style="margin-left: 25px; margin-right: 25px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Buscar Receta</button>
+                <button id="cancelar-receta" style="margin-left: 25px; margin-right: 25px; padding: 10px 20px; font-size: 16px; color: white; background-color: #FF4500; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Cancelar</button>
+                <div id="resultados-receta" style="display:none;">
+                    <br>
+                    <h3 style="color: #0E4C92; font-weight: bold; font-size: 24px; text-align: center; margin-top: 20px; margin-bottom: 10px; background-color: #E8F4FA; padding: 15px; border-radius: 10px; border: 2px solid #B0C4DE; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Recetas Encontradas:</h3>
+                    <ul id="lista-recetas" style="list-style-type: none; padding: 0; margin: 20px 20px; background-color: #f5f5dc; border-radius: 10px; border: 1px solid #B0C4DE; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                        <!-- Recetas encontradas -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <button id="regresar-menu" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; color: white; background-color: #0E4C92; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">Regresar al Menú</button>
+    </main>
+
+    <!-- Modal para mostrar la información de la receta -->
+    <div id="modal-receta" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="titulo-receta"></h2>
+            <p id="detalles-receta"></p>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

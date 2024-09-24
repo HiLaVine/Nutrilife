@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'autenticacao/css/cadastro.css' %}">
+{% endblock %}
+{% block 'titulo' %}Cadastre-se{% endblock %}
+{% block 'body' %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 sidebar">
+                <div class="logo_sidebar">
+                    <h2 class="logo">
+                        <img class="img_logo_sidebar" src="{% static 'autenticacao/img/logo_nutri_lab.png' %}">
+                    </h2>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="area_cadastrar">
+                    {% if messages %}
+                        <br>
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <h2 class="titulo" style="color: green">Bienvenido a NutriLife🥕</h2><br>
+                    <p class="sub-titulo" class="bold" style="color: #000080;" >Crea tu cuenta🥦</p>
+                    <hr>
+                    <form action="{% url 'cadastro' %}" method="POST">
+                        {% csrf_token %}
+                        <span class="bold" style="color: orange">Nombre del Usuario</span>
+                        <input class="form-control input-form" name="usuario" type="text"
+                               placeholder="Escriba su nombre...">
+                        <br>
+                        <span class="bold" >Correo Electronico</span>
+                        <input class="form-control input-form" name="email" type="text"
+                               placeholder="Escriba su correo...">
+                        <br>
+                        <div class="row">
+                            <div class="col-md">
+                                <span class="bold" style="color: orange">Contraseña</span>
+                                <input class="form-control input-form" name="senha" type="password"
+                                       placeholder="Escriba su contraseña...">
+                            </div>
+                            <div class="col-md">
+                                <span class="bold">Confirmar contraseña</span>
+                                <input class="form-control input-form" name="confirmar_senha" type="password"
+                                       placeholder="Confirme su contraseña...">
+                            </div>
+                        </div>
+                        <br>
+                        <button class="btn-first">Registrar</button>
+                    </form>
+                    <h3 style="position: absolute; bottom: 65px; font-weight: bold">
+                        Ya tienes una cuenta?&nbsp
+                        <a href="{% url 'logar' %}" class="btn btn-outline-success btn-lg">Iniciar Sesion</a>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

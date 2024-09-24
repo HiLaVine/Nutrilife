@@ -1,0 +1,261 @@
+{% extends 'base_plataforma.html' %}
+{% load static %}
+{% block 'plataforma' %}
+    <style>
+        .table-header {
+            background-color: #eb5d67; /* Color de fondo */
+            color: white; /* Color del texto */
+            padding: 10px; /* Espaciado */
+            text-align: center; /* Alineación del texto */
+            font-weight: bold; /* Texto en negrita */
+        }
+
+        .table-cell {
+            text-align: center; /* Alineación del texto */
+        }
+    </style>
+
+    {% if messages %}
+        <br>
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            {% if paciente.sexo == "M" %}
+                <img src="{% static 'plataforma/img/perfil2.png' %}">
+            {% else %}
+                <img src="{% static 'plataforma/img/perfil1.png' %}">
+            {% endif %}
+        </div>
+        <div class="col-md-3 dados descricao">
+            <h4>{{ paciente.nome }}</h4>
+            <h6>{{ paciente.idade }} años</h6>
+        </div>
+    </div>
+    <hr>
+    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal">
+        Agregar Datos de los Familiares
+    </button>
+    <br>
+    <br>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="table-header">Peso</th>
+            <th scope="col" class="table-header">Altura</th>
+            <th scope="col" class="table-header">IMC</th>
+            <th scope="col" class="table-header">Nivel de Peso</th>
+            <th scope="col" class="table-header">Recomendación</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for dado in dados_paciente %}
+            <tr data-peso="{{ dado.peso }}" data-altura="{{ dado.altura }}">
+                <th scope="row" class="table-cell">{{ dado.peso }} Kg</th>
+                <td class="table-cell">{{ dado.altura }} cm</td>
+                <td class="imc-cell table-cell"></td>
+                <td class="nivel-peso-cell table-cell"></td>
+                <td class="recomendacion-cell table-cell"></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <div style="width: 60%;">
+        <canvas id="myChart"></canvas>
+    </div>
+    <br>
+    <br>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function calculateIMC(peso, altura) {
+            if (altura > 0) {
+                return (peso / ((altura / 100) * (altura / 100))).toFixed(2);
+            } else {
+                return 'N/A';
+            }
+        }
+
+        function getRecommendation(imc) {
+            if (imc === 'N/A') {
+                return {
+                    nivelPeso: 'Datos insuficientes',
+                    recomendacion: 'Datos insuficientes'
+                };
+            }
+            imc = parseFloat(imc);
+            if (imc < 18.5) {
+                return {
+                    nivelPeso: 'Peso Bajo',
+                    recomendacion: 'Consulta a un Nutricionista'
+                };
+            } else if (imc >= 18.5 && imc < 24.9) {
+                return {
+                    nivelPeso: 'Peso Normal',
+                    recomendacion: 'Sigue así :)'
+                };
+            } else if (imc >= 25 && imc < 29.9) {
+                return {
+                    nivelPeso: 'Sobrepeso',
+                    recomendacion: 'Consulta a un Nutricionista'
+                };
+            } else {
+                return {
+                    nivelPeso: 'Obesidad',
+                    recomendacion: 'Consulta a un Médico'
+                };
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const rows = document.querySelectorAll("tr[data-peso][data-altura]");
+            rows.forEach(row => {
+                const peso = parseFloat(row.getAttribute("data-peso"));
+                const altura = parseFloat(row.getAttribute("data-altura"));
+                const imcCell = row.querySelector(".imc-cell");
+                const nivelPesoCell = row.querySelector(".nivel-peso-cell");
+                const recomendacionCell = row.querySelector(".recomendacion-cell");
+                const imc = calculateIMC(peso, altura);
+                imcCell.textContent = imc;
+                const recommendation = getRecommendation(imc);
+                nivelPesoCell.textContent = recommendation.nivelPeso;
+                recomendacionCell.textContent = recommendation.recomendacion;
+            });
+        });
+
+        fetch("/grafico_peso/{{paciente.id}}/", {
+            method: 'POST',
+        }).then(function (result) {
+            return result.json()
+        }).then(function (data_paciente) {
+            const data = {
+                labels: data_paciente['labels'],
+                datasets: [{
+                    label: 'Peso paciente',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: data_paciente['peso'],
+                }]
+            };
+            const config = {
+                type: 'line',
+                data: data,
+                options: {}
+            };
+            const myChart = new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+        });
+        
+    </script>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'dados_paciente' paciente.id %}" method="POST">
+                        {% csrf_token %}
+                        <h4 class="titulo">Datos del Familiar</h4>
+                        <div class="form-row">
+                            <div class='col-md'>
+                                <label for="peso">Peso</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="--" name="peso" id="peso" required>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Kg</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md'>
+                                <label for="altura">Altura</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="--" name="altura" id="altura" required>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">cm</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-row">
+                            <div class='col-md'>
+                                <label for="gordura">Porcentaje de Gordura</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="--" name="gordura">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md'>
+                                <label for="musculo">Porcentaje de Músculo</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="--" name="musculo">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-row">
+                            <div class='col-md'>
+                                <label for="hdl">Colesterol(HDL)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="--" name="hdl">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">mg/dL</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md'>
+                                <label for="ldl">Colesterol (LDL)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="--" name="ldl">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">mg/dL</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-row">
+                            <div class='col-md'>
+                                <label for="ctotal">Colesterol Total</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="--" name="ctotal">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">mg/dL</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md'>
+                                <label for="trigliceridios">Triglicerídios</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="--" name="triglicerídios">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">mg/dL</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <input type="submit" value="Registrar" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

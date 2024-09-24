@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'plataforma/css/css.css' %}">
+    <link rel="stylesheet" href="{% static 'plataforma/css/plano_alimentar.css' %}">
+    <!-- Incluir el archivo JavaScript -->
+    <script src="{% static 'plataforma/js/mi_script.js' %}"></script>
+{% endblock %}
+{% block 'body' %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <a href="{% url 'pacientes' %}" class="link-lateral">
+                    <div class="card-lateral">
+                        <img src="{% static 'plataforma/img/familia.png' %}">
+                        <br>
+                        <h3>Miembros de la Familia</h3>
+                    </div>
+                </a>
+                <a href="{% url 'dados_paciente_listar' %}" class="link-lateral">
+                    <div class="card-lateral">
+                        <img src="{% static 'plataforma/img/datos_familiares.png' %}">
+                        <br>
+                        <h3>Datos de los Familiares</h3>
+                    </div>
+                </a>
+                <a href="{% url 'plano_alimentar_listar' %}" class="link-lateral">
+                    <div class="card-lateral">
+                        <img src="{% static 'plataforma/img/alimentos.png' %}">
+                        <br>
+                        <h3>Alimentos Consumidos</h3>
+                    </div>
+                </a>
+                <a href="http://localhost:8000/index.html" class="link-lateral">
+                    <div class="card-lateral">
+                        <img src="{% static 'plataforma/img/receta.png' %}">
+                        <br>
+                        <h3>Lista de Compras
+                        </h3>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-8">
+                {% block 'plataforma' %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <!-- Puedes agregar más scripts aquí si es necesario -->
+    <script>
+        // Tu código JavaScript aquí
+        console.log('JavaScript cargado correctamente');
+    </script>
+{% endblock %}

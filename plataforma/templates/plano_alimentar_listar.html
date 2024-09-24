@@ -1,0 +1,51 @@
+{% extends 'base_plataforma.html' %}
+{% load static %}
+{% block 'plataforma' %}
+    {% if messages %}
+        <br>
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <br><br>
+    
+    <h1 class="titulo" style="font-family: 'Arial', sans-serif; color: #4CAF50; text-align:; text-transform: uppercase; font-size: 2.5em; margin-top: 20px; margin-bottom: 20px; letter-spacing: 1.5px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); border-bottom: 2px solid #4CAF50; padding-bottom: 10px;">&nbsp;&nbsp;Elige un Familiar</h1>
+    <div class="container mt-4">
+        <div class="row">
+            {% for paciente in pacientes %}
+                <div class="col-md-4">
+                    <a href="{% url 'plano_alimentar' paciente.id %}" style="text-decoration: none; color: inherit; transition: color 0.2s;">
+                        <div style="background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin: 20px 0; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.2s; text-align: center;">
+                            <div style="margin-bottom: 15px;">
+                                {% if paciente.sexo == "M" %}
+                                    <img src="{% static 'plataforma/img/perfil2.png' %}" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover;">
+                                {% else %}
+                                    <img src="{% static 'plataforma/img/perfil1.png' %}" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover;">
+                                {% endif %}
+                            </div>
+                            <p style="font-family: 'Arial', sans-serif; color: #555; line-height: 1.6;">Nombre: {{ paciente.nome }}</p>
+                            <p style="font-family: 'Arial', sans-serif; color: #555; line-height: 1.6;">Edad: {{ paciente.idade }} años</p>
+                        </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        document.querySelectorAll('.col-md-4 a').forEach(link => {
+            link.addEventListener('mouseover', () => {
+                link.style.color = '#4CAF50';
+            });
+            link.addEventListener('mouseout', () => {
+                link.style.color = 'inherit';
+            });
+            link.querySelector('div').addEventListener('mouseover', () => {
+                link.querySelector('div').style.transform = 'scale(1.05)';
+            });
+            link.querySelector('div').addEventListener('mouseout', () => {
+                link.querySelector('div').style.transform = 'scale(1)';
+            });
+        });
+    </script>
+{% endblock %}
