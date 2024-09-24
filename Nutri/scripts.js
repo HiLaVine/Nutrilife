@@ -1,6 +1,6 @@
 const apiUrl = 'http://localhost:3000'; // URL del servidor backend
 const spoonacularApiKey = 'e89fd4ec91b04675a6b5d784fe8864d9'; // Reemplaza con tu API Key de Spoonacular
-const googleTranslateApiKey = 'AIzaSyAuTGfew_k0HIqzFlQkDTZtCH_aAPZIhos'; // Reemplaza con tu API Key de Google Translate
+const googleTranslateApiKey = ''; // Reemplaza con tu API Key de Google Translate
 
 document.getElementById('regresar-menu').addEventListener('click', function() {
     window.location.href = 'http://127.0.0.1:8000/pacientes/';
